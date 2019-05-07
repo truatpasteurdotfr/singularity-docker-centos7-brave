@@ -5,15 +5,18 @@ From: centos:7
 yum -y update 
 yum -y upgrade
 
-cat << EOF >  /etc/yum.repos.d/Brave.repo
-[brave-browser-beta]
-name=Brave Browser Beta Channel repository
-baseurl=https://brave-browser-rpm-beta.s3.brave.com/x86_64/
+# https://brave-browser.readthedocs.io/en/latest/installing-brave.html#linux
+
+cat << EOF > /etc/yum.repos.d/brave-browser-release.repo
+[brave-browser-release]
+name=Brave Browser Release Channel repository
+baseurl=https://brave-browser-rpm-release.s3.brave.com/x86_64/
 enabled=1
 EOF
 
-rpm --import https://brave-browser-rpm-beta.s3.brave.com/brave-core-nightly.asc
-yum -y install brave-browser-beta
+yum -y install brave-keyring brave-browser
 
 %runscript
+# --no-sandbox is a security risk
 brave-browser --no-sandbox "$@"
+
